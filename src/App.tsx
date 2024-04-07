@@ -4,12 +4,13 @@ import "./App.css";
 import { useGetGitCommits } from "./hooks/useGetGitCommits";
 
 function App() {
-  const {} = useGetGitCommits({
-    ownerName: "",
-    repoName: "",
+  const { data, error, isLoading } = useGetGitCommits({
+    ownerName: "rickleibow",
+    repoName: "Crossroads-group",
     githubPersonalToken: process.env.REACT_APP_GITHUB_TOKEN!,
   });
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+
+  return <pre className="">{JSON.stringify({ data }, null, 2)}</pre>;
 }
 
 export default App;
