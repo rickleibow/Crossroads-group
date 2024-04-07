@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GithubCommit } from "../types";
 
 interface useGetGitCommitsProps {
   repoName: string;
@@ -13,7 +14,7 @@ export const useGetGitCommits = ({
 }: useGetGitCommitsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [data, setData] = useState();
+  const [data, setData] = useState<GithubCommit[]>([]);
 
   useEffect(() => {
     const FetchCommits = async () => {
