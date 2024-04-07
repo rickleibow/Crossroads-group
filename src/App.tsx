@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { useGetGitCommits } from "./hooks/useGetGitCommits";
-import { BiUser, BiTime, BiHash, BiMessageAlt } from "react-icons/bi";
+import { BiUser, BiTime, BiHash } from "react-icons/bi";
+import { MdMouse } from "react-icons/md";
+import { ScrollWheel } from "./icons/ScrollWheel";
 
 function App() {
   const { data, error, isLoading } = useGetGitCommits({
@@ -15,7 +17,6 @@ function App() {
   let canScroll = true;
   function handleWheel(event: WheelEvent) {
     if (canScroll) {
-      console.log("can scroll", { event });
       setCommitIdx((idx) => {
         const getNewIdx = () => {
           if (event.deltaY > 1) {
@@ -36,7 +37,7 @@ function App() {
           block: "center",
           inline: "center",
         });
-        console.log("new idx", { newIdx, event: event.deltaY });
+
         return newIdx;
       });
 
@@ -58,10 +59,19 @@ function App() {
   }, [data]);
 
   return (
-    <div className="overflow-hidden h-screen p-16 w-full flex items-center">
+    <div className="overflow-hidden h-screen p-32 w-full flex items-center">
+      <img
+        src="/bg.avif"
+        className="w-screen h-screen object-cover fixed top-0 left-0"
+      />
+      <div className="z-30 fixed top-16 right-16 text-3xl text-black items-center flex flex-col gap-2">
+        <ScrollWheel></ScrollWheel>
+        <p className="text-base">Scroll</p>
+      </div>
+      <div className="w-[90vw] h-[90vh] rounded-xl bg-white bg-opacity-25 blur fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="relative">
         <div
-          style={{ width: `${data.length * 20}rem` }}
+          style={{ width: `${(data.length - 1) * 20}rem` }}
           className="h-2 border border-black rounded-full"
         ></div>
 
@@ -71,51 +81,54 @@ function App() {
         />
 
         {data.length &&
-          data.map((commit, idx) => (
-            <div
-              data-commitIdx={idx}
-              key={commit.sha}
-              style={{ left: `${idx * 20}rem` }}
-              className={`absolute w-6 h-6 top-1/2 -translate-x-1/2 -translate-y-1/2 ${
-                commitIdx >= idx ? "bg-black" : "bg-white"
-              } border border-black rounded-full`}
-            >
-              <div className="relative">
-                <div
-                  className={`${
-                    commitIdx === idx
-                      ? "-translate-y-[120%] opacity-100 pointer-events-none"
-                      : "-translate-y-[100%] pointer-events-auto opacity-0"
-                  } py-4 px-8 transition-all bg-white rounded-xl shadow-sm absolute top-0 flex flex-col gap-4`}
-                >
-                  <div className="flex gap-2">
-                    <BiUser></BiUser>
-                    <p>{commit?.commit?.committer?.name}</p>
+          data.map((_commit, idx) => {
+            const commit = data[data.length - 1 - idx];
+            return (
+              <div
+                data-commitIdx={idx}
+                key={commit.sha}
+                style={{ left: `${idx * 20}rem` }}
+                className={`absolute w-6 h-6 top-1/2 -translate-x-1/2 -translate-y-1/2 ${
+                  commitIdx >= idx ? "bg-black" : "bg-white"
+                } border border-black rounded-full`}
+              >
+                <div className="relative">
+                  <div
+                    className={`${
+                      commitIdx === idx
+                        ? "-translate-y-[120%] opacity-100 pointer-events-none"
+                        : "-translate-y-[100%] pointer-events-auto opacity-0"
+                    } py-4 px-8 transition-all bg-white rounded-xl shadow-sm absolute top-0 flex flex-col gap-4`}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <BiUser></BiUser>
+                      <p>{commit?.commit?.committer?.name}</p>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <BiTime></BiTime>
+                      <p>{commit?.commit?.committer?.date}</p>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <BiHash></BiHash>
+                      <p>{commit?.sha}</p>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <BiTime></BiTime>
-                    <p>{commit?.commit?.committer?.date}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <BiHash></BiHash>
-                    <p>{commit?.sha}</p>
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    commitIdx === idx
-                      ? "translate-y-16 opacity-100 pointer-events-none"
-                      : "translate-y-10 pointer-events-auto opacity-0"
-                  } py-4 px-8 transition-all min-w-48 bg-white rounded-xl shadow-sm absolute top-0 flex flex-col gap-4`}
-                >
-                  <div className="flex flex-col gap-2 justify-center text-center">
-                    <p className="font-bold text-xl">Message</p>
-                    <p>{commit.commit.message}</p>
+                  <div
+                    className={`${
+                      commitIdx === idx
+                        ? "translate-y-16 opacity-100 pointer-events-none"
+                        : "translate-y-10 pointer-events-auto opacity-0"
+                    } py-4 px-8 transition-all min-w-48 bg-white rounded-xl shadow-sm absolute top-0 flex flex-col gap-4`}
+                  >
+                    <div className="flex flex-col gap-2 justify-center text-center">
+                      <p className="font-bold text-xl">Message</p>
+                      <p>{commit.commit.message}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
     </div>
   );
