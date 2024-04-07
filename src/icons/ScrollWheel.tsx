@@ -18,14 +18,14 @@ export const ScrollWheel = () => {
       />
       <path
         d="M12 6V14"
-        stroke="#000000"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M15 11L12 14L9 11"
-        stroke="#000000"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"

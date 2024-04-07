@@ -44,7 +44,7 @@ function App() {
       canScroll = false;
       setTimeout(() => {
         canScroll = true;
-      }, 1000);
+      }, 500);
     }
   }
 
@@ -64,7 +64,7 @@ function App() {
         src="/bg.avif"
         className="w-screen h-screen object-cover fixed top-0 left-0"
       />
-      <div className="z-30 fixed top-16 right-16 text-3xl text-black items-center flex flex-col gap-2">
+      <div className="z-30 fixed top-16 right-16 text-3xl text-white items-center flex flex-col gap-2">
         <ScrollWheel></ScrollWheel>
         <p className="text-base">Scroll</p>
       </div>
